@@ -1,0 +1,45 @@
+name: Build and Upload to S3
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build the app
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build -c release --no-restore
+
+    - name: Install zip
+      uses: montudor/action-zip@v1
+
+    - name: Zip output
+      run: zip -qq -r classroom.zip bin/release/netcoreapp6.0
+
+    # Not needed, but very handy when trying to figure out what the action is doing
+    #- name: Local file stuff
+    #  run: pwd; ls -al; find .
+    
+    - name: Upload to S3 
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --exclude '*' --include 'classroom.zip' 
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
