@@ -13,22 +13,26 @@ phases:
             - REPOSITORY_URI=852659409621.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre
             - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
             - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+            - dotnet tool install --global dotnet-sonarscanner
     build:
         commands:
             - echo Build started on `date`
+            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url="http://54.91.153.34:9000"  /d:sonar.login="sqp_b869d1b90360809861576c619ad07c7040a282c3"
+            - dotnet build
+            - dotnet sonarscanner end /d:sonar.login="sqp_b869d1b90360809861576c619ad07c7040a282c3"
             - dotnet publish -c release -o ./build_output ClassroomApp.csproj
-            - echo Building the Docker image...          
-            - docker build -t $REPOSITORY_URI:latest .
-            - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
+            # - echo Building the Docker image...          
+            # - docker build -t $REPOSITORY_URI:latest .
+            # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
     post_build:
         commands:
             - echo Build completed on `date`
-            - echo Pushing the Docker image...
-            - docker push $REPOSITORY_URI:latest
-            - docker push $REPOSITORY_URI:$IMAGE_TAG
-            - echo Writing image definitions file...
-            - printf '[{"name":"ClassroomApp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-            - cat imagedefinitions.json 
+            # - echo Pushing the Docker image...
+            # - docker push $REPOSITORY_URI:latest
+            # - docker push $REPOSITORY_URI:$IMAGE_TAG
+            # - echo Writing image definitions file...
+            # - printf '[{"name":"ClassroomApp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+            # - cat imagedefinitions.json 
 artifacts:
   files:
     - CodeBuild-ClassroomApp/build_output/**/*
