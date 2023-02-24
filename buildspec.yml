@@ -21,7 +21,7 @@ phases:
     build:
         commands:
             - echo Build started on `date`
-            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host"http://54.173.241.254:9000" /d:sonar.login=$Sonar_AccessToken
+            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host /d:sonar.login=$Sonar_AccessToken
             - dotnet build
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
             - dotnet restore
