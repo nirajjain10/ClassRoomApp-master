@@ -37,10 +37,10 @@ phases:
             # - printf '[{"name":"ClassroomApp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
             # - cat imagedefinitions.json 
 artifacts:
-  files:
-    base-directory: build_output
+  base-directory: build_output
     files:
       - '**/*'
+  #files:    
     #- ./build_output/**/*
     #- imagedefinitions.json
     #- scripts/**/*
