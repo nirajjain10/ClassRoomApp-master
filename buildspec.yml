@@ -20,7 +20,10 @@ phases:
             - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url="http://54.173.241.254:9000"  /d:sonar.login="sqp_9678b170967e40091d3e70d5361d9d79b453352e"
             - dotnet build
             - dotnet sonarscanner end /d:sonar.login="sqp_9678b170967e40091d3e70d5361d9d79b453352e"
-            - dotnet publish -c release -o ./build_output ClassroomApp.csproj
+            - dotnet restore
+            - dotnet build --no-restore
+            - dotnet publish --no-restore --output build_output
+            # - dotnet publish -c release -o ./build_output ClassroomApp.csproj
             # - echo Building the Docker image...          
             # - docker build -t $REPOSITORY_URI:latest .
             # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
@@ -35,7 +38,10 @@ phases:
             # - cat imagedefinitions.json 
 artifacts:
   files:
-    - CodeBuild-ClassroomApp/build_output/**/*
-    - imagedefinitions.json
+    base-directory: build_output
+    files:
+      - '**/*'
+    #- ./build_output/**/*
+    #- imagedefinitions.json
     #- scripts/**/*
     #- appspec.yml
