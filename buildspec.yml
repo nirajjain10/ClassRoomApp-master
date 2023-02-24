@@ -1,4 +1,8 @@
 version: 0.2
+env:
+  secrets-manager:
+    Sonar_AccessToken: SRE_Secrets:Sonar_AccessToken
+    Sonar_Host: SRE_Secrets:Sonar_Host
 phases:
     install:
         commands:
@@ -17,9 +21,9 @@ phases:
     build:
         commands:
             - echo Build started on `date`
-            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url="http://54.173.241.254:9000"  /d:sonar.login="sqp_9678b170967e40091d3e70d5361d9d79b453352e"
+            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host"http://54.173.241.254:9000" /d:sonar.login=$Sonar_AccessToken
             - dotnet build
-            - dotnet sonarscanner end /d:sonar.login="sqp_9678b170967e40091d3e70d5361d9d79b453352e"
+            - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
             - dotnet restore
             - dotnet build --no-restore
             - dotnet publish --no-restore --output build_output
@@ -38,7 +42,7 @@ phases:
             # - cat imagedefinitions.json 
 artifacts:
   files:    
-    - ./build_output/**/*
+    #- ./build_output/**/*
     #- imagedefinitions.json
     #- scripts/**/*
     #- appspec.yml
