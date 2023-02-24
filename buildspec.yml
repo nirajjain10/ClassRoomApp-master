@@ -17,9 +17,9 @@ phases:
     build:
         commands:
             - echo Build started on `date`
-            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url="http://54.91.153.34:9000"  /d:sonar.login="sqp_b869d1b90360809861576c619ad07c7040a282c3"
+            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url="http://54.173.241.254:9000"  /d:sonar.login="sqp_9678b170967e40091d3e70d5361d9d79b453352e"
             - dotnet build
-            - dotnet sonarscanner end /d:sonar.login="sqp_b869d1b90360809861576c619ad07c7040a282c3"
+            - dotnet sonarscanner end /d:sonar.login="sqp_9678b170967e40091d3e70d5361d9d79b453352e"
             - dotnet publish -c release -o ./build_output ClassroomApp.csproj
             # - echo Building the Docker image...          
             # - docker build -t $REPOSITORY_URI:latest .
