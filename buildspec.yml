@@ -21,11 +21,10 @@ phases:
     build:
         commands:
             - echo Build started on `date`
+            - dotnet restore
             - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host /d:sonar.login=$Sonar_AccessToken
             - dotnet build
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
-            - dotnet restore
-            - dotnet build --no-restore
             - dotnet publish --no-restore --output build_output
             # - dotnet publish -c release -o ./build_output ClassroomApp.csproj
             # - echo Building the Docker image...          
