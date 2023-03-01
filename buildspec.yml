@@ -27,6 +27,7 @@ phases:
             - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host
                     /d:sonar.cs.xunit.reportsPaths="artifacts/xunit/*.xml"
                     /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+                    /d:sonar.dotnet.excludeTestProjects=true
                     /d:sonar.login=$Sonar_AccessToken
             - dotnet build
             - dotnet test
