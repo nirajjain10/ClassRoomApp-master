@@ -29,6 +29,7 @@ phases:
                     /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
                     /d:sonar.dotnet.excludeTestProjects=true
                     /d:sonar.login=$Sonar_AccessToken
+                    /d:sonar.qualitygate.wait=true"
             - dotnet build
             - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
@@ -38,10 +39,10 @@ phases:
             # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults            
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
 
-            - sleep 5            
-            - quality_status=$(curl -u $Sonar_AccessToken $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq -r '.projectStatus.status')
-            - echo $quality_status
-            - if [ $quality_status = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ; fi
+            # - sleep 5            
+            # - quality_status=$(curl -u $Sonar_AccessToken $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq -r '.projectStatus.status')
+            # - echo $quality_status
+            # - if [ $quality_status = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ; fi
             
             # - quality_status='url -s -u  $Sonar_AccessToken: $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq '.projectStatus.status' | tr -d '"'`
             # - echo $quality_status
