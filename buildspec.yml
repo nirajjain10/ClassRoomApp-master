@@ -29,8 +29,8 @@ phases:
                     /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
                     /d:sonar.dotnet.excludeTestProjects=true
                     /d:sonar.login=$Sonar_AccessToken
-                    /d:sonar.qualitygate.wait=true
-                    /d.sonar.qualitygate.timeout=300
+                    # /d:sonar.qualitygate.wait=true
+                    # /d.sonar.qualitygate.timeout=300
             - dotnet build
             - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
@@ -57,8 +57,8 @@ phases:
     post_build:
         commands:
             - echo Build completed on `date`
-            - echo $(curl -u $Sonar_AccessToken $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq -r '.projectStatus.status')
-            - quality_status=$(curl -u $Sonar_AccessToken $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq -r '.projectStatus.status')
+            - echo '$(curl -u {Sonar_AccessToken} {Sonar_Host}/api/qualitygates/project_status?projectKey={Sonar_Project} | jq -r '.projectStatus.status')'
+            - quality_status=$(curl -u {Sonar_AccessToken} {Sonar_Host}/api/qualitygates/project_status?projectKey={Sonar_Project} | jq -r '.projectStatus.status')
             - echo $quality_status
             - if [ $quality_status = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ; fi
             # - echo Pushing the Docker image...
