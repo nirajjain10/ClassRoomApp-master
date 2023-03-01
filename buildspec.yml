@@ -39,7 +39,8 @@ phases:
             #     $CODEBUILD_BUILD_SUCCEEDING -eq 0;
             #   fi            
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
-            - quality_status='curl -s -u  $Sonar_AccessToken: $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq '.projectStatus.status' | tr -d '"'`
+            - quality_status = curl -s -u  $Sonar_AccessToken $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq '.projectStatus.status' | tr -d
+            #- quality_status='url -s -u  $Sonar_AccessToken: $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq '.projectStatus.status' | tr -d '"'`
             - echo $quality_status
             - if [ "$quality_status" = "OK" ] then
                 exit 0
