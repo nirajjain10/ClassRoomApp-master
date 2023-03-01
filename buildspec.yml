@@ -39,13 +39,11 @@ phases:
             
             - sleep 5 #let the sonar scan complete            
             - curl -u $Sonar_AccessToken:'' $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
-            #- cat result.json
-            - quality_status = $(jq -r '.projectStatus.status' result.json)
-            - echo $quality_status
+            #- cat result.json            
             - |
-                if [ $quality_status = OK ] ; then     
+                if [ $(jq -r '.projectStatus.status' result.json) = OK ] ; then     
                     echo "in quality_status OK condition"  
-                elif [ $quality_status = "ERROR" ]; then
+                elif [ $(jq -r '.projectStatus.status' result.json) = "ERROR" ]; then
                     echo "in quality_status ERROR or WARN condition"
                     exit 1;                    
                 fi
