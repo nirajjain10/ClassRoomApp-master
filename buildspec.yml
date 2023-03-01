@@ -43,7 +43,7 @@ phases:
             - |
                 if [ $(jq -r '.projectStatus.status' result.json) = OK ] ; then     
                     echo "in quality_status OK condition"  
-                elif [ $(jq -r '.projectStatus.status' result.json) = "ERROR" ]; then
+                elif [ $(jq -r '.projectStatus.status' result.json) = ERROR ]; then
                     echo "in quality_status ERROR or WARN condition"
                     exit 1;                    
                 fi
