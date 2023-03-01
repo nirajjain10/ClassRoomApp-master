@@ -23,9 +23,12 @@ phases:
         commands:
             - echo Build started on `date`
             - dotnet restore
-            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host
+                    /d:sonar.cs.xunit.reportsPaths="artifacts/xunit/*.xml"
+                    /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
                     /d:sonar.login=$Sonar_AccessToken
             - dotnet build
+            - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
             # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken

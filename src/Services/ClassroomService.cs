@@ -4,25 +4,25 @@ namespace ClassroomApp.Services
 {
     public class ClassroomService : IClassroomService
     {
-        private IList<Student> _students;
+        private readonly IList<Student> _students;
 
         public ClassroomService()
         {
             _students = new List<Student>();
 
-            var student1 = new Student(){
+            var student1 = new Student() {
                 Id = 1,
                 Name = "Jon Doe",
                 Grade = "1"
             };
 
-            var student2 = new Student(){
+            var student2 = new Student() {
                 Id = 2,
                 Name = "Alice",
                 Grade = "3"
             };
 
-            var student3 = new Student(){
+            var student3 = new Student() {
                 Id = 3,
                 Name = "Bob",
                 Grade = "2"
