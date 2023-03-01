@@ -18,12 +18,15 @@ phases:
             - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
             - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
             - dotnet tool install --global dotnet-sonarscanner
+            - dotnet tool install --global dotnet-coverage
     build:
         commands:
             - echo Build started on `date`
             - dotnet restore
             - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host /d:sonar.login=$Sonar_AccessToken
             - dotnet build
+            - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
+            # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
             - dotnet publish --no-restore --output build_output
             # - dotnet publish -c release -o ./build_output ClassroomApp.csproj
