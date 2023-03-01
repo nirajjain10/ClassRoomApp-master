@@ -32,17 +32,24 @@ phases:
             - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
             # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults
-            - curl $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
-            - cat result.json            
-            - if [ $(jq -r '.projectStatus.status' result.json) == ERROR ] ; then 
-                $CODEBUILD_BUILD_SUCCEEDING -eq 0;
-              fi
+            # - curl $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
+            # - cat result.json 
+            # - quality_status= $(jq -r '.projectStatus.status' result.json)          
+            # - if [ $quality_status = ERROR ]; then 
+            #     $CODEBUILD_BUILD_SUCCEEDING -eq 0;
+            #   fi            
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
-            
+            - quality_status='curl -s -u  $Sonar_AccessToken: $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq '.projectStatus.status' | tr -d '"'`
+            - echo $quality_status
+            - if [ "$quality_status" = "OK" ] then
+                exit 0
+              elif [ "$quality_status" = "ERROR" ] then
+                exit 1
+              fi           
 
             - dotnet publish --no-restore --output build_output
             # - dotnet publish -c release -o ./build_output ClassroomApp.csproj
-            # - echo Building the Docker image...          
+            # - echo Building the Docker image...
             # - docker build -t $REPOSITORY_URI:latest .
             # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
     post_build:
