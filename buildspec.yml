@@ -31,15 +31,17 @@ phases:
             - dotnet build
             - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
-            # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults
-            - sleep 5
             # - curl $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project >result.json
             # - cat result.json
             # - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi
+            # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults            
+            - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
+
+            - sleep 5            
             - quality_status=$(curl -u $Sonar_AccessToken $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq -r '.projectStatus.status')
             - echo $quality_status
             - if [ $quality_status = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ; fi
-            - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
+            
             # - quality_status='url -s -u  $Sonar_AccessToken: $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project | jq '.projectStatus.status' | tr -d '"'`
             # - echo $quality_status
             # - if [ "$quality_status" = "OK" ] then
