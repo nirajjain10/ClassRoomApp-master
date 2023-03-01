@@ -29,7 +29,8 @@ phases:
                     /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
                     /d:sonar.dotnet.excludeTestProjects=true
                     /d:sonar.login=$Sonar_AccessToken
-                    /d:sonar.qualitygate.wait=true"
+                    /d:sonar.qualitygate.wait=true
+                    /d.sonar.qualitygate.timeout=300
             - dotnet build
             - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
