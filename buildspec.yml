@@ -1,9 +1,10 @@
 version: 0.2
 env:
+  variables:
+    Sonar_Project: "SRE-Demo"
   secrets-manager:
     Sonar_AccessToken: SRE_Secrets:Sonar_AccessToken
-    Sonar_Host: SRE_Secrets:Sonar_Host
-Sonar_Project: "SRE-Demo"
+    Sonar_Host: SRE_Secrets:Sonar_Host  
 phases:
     install:
         commands:
@@ -60,9 +61,10 @@ phases:
             #- quality_status=$(curl -u ${Sonar_AccessToken}: ${Sonar_Host}/api/qualitygates/project_status?projectKey=${Sonar_Project} | jq -r '.projectStatus.status')
             - curl -u $Sonar_AccessToken:'' $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
             - cat result.json
-            - echo result.json
+            - echo $result.json
             - quality_status=$(curl -u ${Sonar_AccessToken}:'' ${Sonar_Host}/api/qualitygates/project_status?projectKey=${Sonar_Project} | jq -r '.projectStatus.status')
             - echo $quality_status
+            - cat quality_status
             #- if [ $quality_status = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ; fi
             
             # - echo Pushing the Docker image...
