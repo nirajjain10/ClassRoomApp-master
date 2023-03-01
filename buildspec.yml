@@ -3,6 +3,7 @@ env:
   secrets-manager:
     Sonar_AccessToken: SRE_Secrets:Sonar_AccessToken
     Sonar_Host: SRE_Secrets:Sonar_Host
+Sonar_Project: "SRE-Demo"
 phases:
     install:
         commands:
@@ -31,7 +32,12 @@ phases:
             - dotnet test
             - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
             # - dotnet test -c Release ./test/ClassroomApp.Tests.csproj --logger trx --results-directory ./testresults
+            - curl $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
+            - cat result.json            
+            - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0;fi
             - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
+            
+
             - dotnet publish --no-restore --output build_output
             # - dotnet publish -c release -o ./build_output ClassroomApp.csproj
             # - echo Building the Docker image...          
