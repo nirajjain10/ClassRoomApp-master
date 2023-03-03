@@ -1,6 +1,8 @@
 version: 0.2
 env:
   variables:
+    AWS_Region: "us-east-1"
+    AWS_AccountId: "852659409621"
     Sonar_Project: "SRE-Demo"
   secrets-manager:
     Sonar_AccessToken: SRE_Secrets:Sonar_AccessToken
@@ -15,8 +17,8 @@ phases:
             #- dotnet restore ClassroomApp.csproj
             - echo Logging in to Amazon ECR...
             - aws --version
-            - aws ecr get-login-password --region $AWS_DEFAULT_REGION
-            - REPOSITORY_URI=852659409621.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre
+            - aws ecr get-login-password --region $AWS_Region | docker login --username AWS --password-stdin $AWS_AccountId.dkr.ecr.$AWS_Region.amazonaws.com
+            - REPOSITORY_URI=$AWS_AccountId.dkr.ecr.$AWS_Region.amazonaws.com/ecr_sample_sre
             - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
             - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
             - dotnet tool install --global dotnet-sonarscanner
