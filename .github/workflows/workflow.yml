@@ -27,8 +27,8 @@ jobs:
     - name: Install zip
       uses: montudor/action-zip@v1
 
-    - name: Zip output
-      run: zip -qq -r classroom.zip bin/release/netcoreapp6.0
+    # - name: Zip output
+    #   run: zip -qq -r classroom.zip src/bin/release/netcoreapp6.0
 
     # Not needed, but very handy when trying to figure out what the action is doing
     #- name: Local file stuff

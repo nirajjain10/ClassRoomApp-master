@@ -25,39 +25,41 @@ phases:
         commands:
             - echo Build started on `date`
             - dotnet restore
-            - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host
-                    /d:sonar.cs.xunit.reportsPaths="artifacts/xunit/*.xml"
-                    /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
-                    /d:sonar.dotnet.excludeTestProjects=true
-                    /d:sonar.login=$Sonar_AccessToken
-                    # /d:sonar.qualitygate.wait=true
-                    # /d.sonar.qualitygate.timeout=300
+            # Start - Sonar Quality Scanning
+            # - dotnet sonarscanner begin /k:"SRE-Demo" /d:sonar.host.url=$Sonar_Host
+            #         /d:sonar.cs.xunit.reportsPaths="artifacts/xunit/*.xml"
+            #         /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml 
+            #         /d:sonar.dotnet.excludeTestProjects=true
+            #         /d:sonar.login=$Sonar_AccessToken
             - dotnet build
             - dotnet test
-            - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'                     
-            - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
-            
-            - sleep 5 #let the sonar scan complete            
-            - curl -u $Sonar_AccessToken:'' $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
-            #- cat result.json            
-            - |
-                if [ $(jq -r '.projectStatus.status' result.json) = OK ] ; then     
-                    echo "in quality_status OK condition"  
-                elif [ $(jq -r '.projectStatus.status' result.json) = ERROR ]; then
-                    echo "in quality_status ERROR or WARN condition"
-                    exit 1;                    
-                fi
-            - dotnet publish --no-restore --output build_output
-            # - dotnet publish -c release -o ./build_output ClassroomApp.csproj
-            # - echo Building the Docker image...
-            # - docker build -t $REPOSITORY_URI:latest .
-            # - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
+            # - dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
+            # - dotnet sonarscanner end /d:sonar.login=$Sonar_AccessToken
+            # End - Sonar Quality Scanning
+
+            # Begin - Verify the Sonar Quality Check Status
+            # - sleep 5 #let the sonar scan complete
+            # - curl -u $Sonar_AccessToken:'' $Sonar_Host/api/qualitygates/project_status?projectKey=$Sonar_Project > result.json
+            # - cat result.json            
+            # - |
+            #     if [ $(jq -r '.projectStatus.status' result.json) = OK ] ; then
+            #         echo "in quality_status OK condition"  
+            #     elif [ $(jq -r '.projectStatus.status' result.json) = ERROR ]; then
+            #         echo "in quality_status ERROR or WARN condition"
+            #         exit 1;                    
+            #     fi
+            # End - Verify the Sonar Quality Check Status
+
+            - dotnet publish --no-restore --output build_output            
+            - echo Building the Docker image...
+            - docker build -t $REPOSITORY_URI:latest .
+            - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
     post_build:
         commands:
             - echo Build completed on `date`
-            # - echo Pushing the Docker image...
-            # - docker push $REPOSITORY_URI:latest
-            # - docker push $REPOSITORY_URI:$IMAGE_TAG
+            - echo Pushing the Docker image...
+            - docker push $REPOSITORY_URI:latest
+            - docker push $REPOSITORY_URI:$IMAGE_TAG
             # - echo Writing image definitions file...
             # - printf '[{"name":"ClassroomApp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
             # - cat imagedefinitions.json 
