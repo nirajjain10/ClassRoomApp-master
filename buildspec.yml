@@ -40,7 +40,7 @@ phases:
             - dotnet tool install --global dotnet-sonarscanner
             - dotnet tool install --global dotnet-coverage
             - echo Update kubeconfig…
-            - aws eks update-kubeconfig — name ${EKS_NAME} — region ${AWS_Region}
+            - aws eks update-kubeconfig --name ${EKS_NAME} --region ${AWS_Region}
             - kubectl version
     build:
         commands:
