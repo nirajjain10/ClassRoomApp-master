@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sre-demo-development
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sre-demo
+      environment: testing
+  template:
+    metadata:
+      labels:
+        app: sre-demo
+        environment: testing
+    spec:
+      containers:
+        - name: sre-demo
+          image: 852659409621.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "500Mi"
+          ports:
+            - containerPort: 8080
+              name: http
+          # env:
+          #   - name: MONGO_URI
+          #     value: "mongodb://admin:admin_password@mongodb-testing:27017/mayaws"
+          #   - name: ES_URL
+          #     value: "http://web-app-es.default.svc.cluster.local:9200/"
+          # command:
+          #   - sh
+          #   - -c
+          #   - npm start
+          # readinessProbe:
+          #   httpGet:
+          #     path: /readiness_check
+          #     port: 8080
+          #   initialDelaySeconds: 60
+          #   timeoutSeconds: 5
+          # livenessProbe:
+          #   httpGet:
+          #     path: /liveness_check
+          #     port: 8080
+          #   initialDelaySeconds: 70
+          #   timeoutSeconds: 10
+          #   failureThreshold: 10  

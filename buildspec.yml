@@ -83,7 +83,8 @@ phases:
             - docker push $REPOSITORY_URI:$IMAGE_TAG
             - echo Rollout new version
             - echo kubectl set image deployment/$DEPLOYMENT_NAME classappContainer=$REPOSITORY_URI:$IMAGE_TAG
-            - “kubectl set image deployment/$DEPLOYMENT_NAME classappContainer=$REPOSITORY_URI:$IMAGE_TAG”
+            - kubectl apply -f deployment.yml
+            # - “kubectl set image deployment/$DEPLOYMENT_NAME classappContainer=$REPOSITORY_URI:$IMAGE_TAG”
             # - echo Writing image definitions file...
             # - printf '[{"name":"ClassroomApp","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
             # - cat imagedefinitions.json 
