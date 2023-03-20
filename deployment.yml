@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sre-demo-development
+  name: sre-demo-deployment
 spec:
   replicas: 1
   selector:
@@ -26,13 +26,12 @@ spec:
               cpu: "200m"
               memory: "500Mi"
           ports:
-            - containerPort: 443
+            - containerPort: 80
+              protocol: TCP
               name: http
-          # env:
-          #   - name: MONGO_URI
-          #     value: "mongodb://admin:admin_password@mongodb-testing:27017/mayaws"
+          # env:            
           #   - name: ES_URL
-          #     value: "http://web-app-es.default.svc.cluster.local:9200/"
+          #     value: "http://sre-demo-es.default.svc.cluster.local:9200/"
           # command:
           #   - sh
           #   - -c
