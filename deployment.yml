@@ -18,13 +18,13 @@ spec:
         - name: sre-demo
           image: 852659409621.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre:latest
           imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: "10m"
-              memory: "128Mi"
-            limits:
-              cpu: "200m"
-              memory: "500Mi"
+          # resources:
+          #   requests:
+          #     cpu: "10m"
+          #     memory: "128Mi"
+          #   limits:
+          #     cpu: "200m"
+          #     memory: "500Mi"
           ports:
             - containerPort: 80
               protocol: TCP
