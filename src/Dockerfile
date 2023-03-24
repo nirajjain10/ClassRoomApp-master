@@ -10,11 +10,11 @@ RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /
 USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR "/src"
-COPY ["ClassroomApp.csproj", ""]
-RUN dotnet restore "ClassroomApp.csproj"
+WORKDIR /src
+COPY ["src/ClassroomApp.csproj", "src/"]
+RUN dotnet restore "src/ClassroomApp.csproj"
 COPY . .
-WORKDIR "/src"
+WORKDIR "/src/src"
 RUN dotnet build "ClassroomApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
