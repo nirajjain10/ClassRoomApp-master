@@ -11,10 +11,10 @@ USER appuser
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/ClassroomApp.csproj", "src/"]
-RUN dotnet restore "src/ClassroomApp.csproj"
+COPY ["ClassroomApp.csproj", ""]
+RUN dotnet restore "ClassroomApp.csproj"
 COPY . .
-WORKDIR "/src/src"
+WORKDIR "/src"
 RUN dotnet build "ClassroomApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
