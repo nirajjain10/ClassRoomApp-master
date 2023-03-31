@@ -10,7 +10,7 @@ env:
 phases:
     install:
         commands:
-            # Installation commands AWS cli, kubectl (needed for Helm) and Helm chart
+            # Installation commands AWS cli, kubectl (needed for Helm) and Helm chart.
             - ECR_NAME=ecr_sample_sre
             - EKS_NAME=sre-eks-cluster
             - DEPLOYMENT_NAME=deploy-classapp
