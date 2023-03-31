@@ -2,7 +2,7 @@ version: 0.2
 env:
   variables:
     AWS_Region: "us-east-1"
-    AWS_AccountId: "852659409621"
+    AWS_AccountId: "616766102138"
     Sonar_Project: "SRE-Demo"
   secrets-manager:
     Sonar_AccessToken: SRE_Secrets:Sonar_AccessToken
