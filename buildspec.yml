@@ -73,7 +73,7 @@ phases:
 
             - dotnet publish --no-restore --output build_output            
             - echo Building the Docker image...
-            - docker build -f src/Dockerfile -t $REPOSITORY_URI:latest .
+            - docker build -t Dockerfile -t $REPOSITORY_URI:latest . # to test in docler use src/Dockerfile
             - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG 
     post_build:
         commands:
