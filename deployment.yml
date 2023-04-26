@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: sre-demo
-          image: 852659409621.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre:latest
+          image: 616766102138.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre:latest
           imagePullPolicy: Always
           # resources:
           #   requests:
