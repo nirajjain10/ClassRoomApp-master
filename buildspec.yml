@@ -69,7 +69,7 @@ phases:
             #         echo "in quality_status ERROR or WARN condition"
             #         exit 1;                    
             #     fi
-            # End - Verify the Sonar Quality Check Status
+            # End - Verify the Sonar Quality Check Status 
 
             - dotnet publish --no-restore --output build_output            
             - echo Building the Docker image...
