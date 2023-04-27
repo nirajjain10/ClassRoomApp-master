@@ -1,31 +1,14 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    kubernetes.io/ingress.class: alb
+  name: sre-demo
   labels:
     app: sre-demo
-  name: sre-demo
 spec:
-  rules:
-  - http:
-      paths:
-      - backend:
-          serviceName: sre-demo
-          servicePort: 8080
-        path: /*
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: sre-demo
-#   labels:
-#     app: sre-demo
-# spec:
-#   selector:
-#     app: sre-demo
-#   type: LoadBalancer
-#   ports: 
-#     - protocol: TCP
-#       port: 8080
-#       targetPort: 8080
+  selector:
+    app: sre-demo
+  #type: LoadBalancer
+  ports: 
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
