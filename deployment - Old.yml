@@ -1,23 +1,32 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sre-demo
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sre-demo-deployment
+  namespace: sre-demo
+  name: deployment-sre-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: sre-demo
-      environment: testing
   template:
     metadata:
       labels:
         app: sre-demo
-        environment: testing
     spec:
       containers:
         - name: sre-demo
           image: 616766102138.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre:latest
           imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: http
           # resources:
           #   requests:
           #     cpu: "10m"
@@ -25,10 +34,7 @@ spec:
           #   limits:
           #     cpu: "200m"
           #     memory: "500Mi"
-          ports:
-            - containerPort: 80
-              protocol: TCP
-              name: http
+          
           # env:            
           #   - name: ES_URL
           #     value: "http://sre-demo-es.default.svc.cluster.local:9200/"
