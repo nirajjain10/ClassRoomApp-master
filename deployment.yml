@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: deployment-sre-demo
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: sre-demo
@@ -17,7 +17,7 @@ spec:
           image: 616766102138.dkr.ecr.us-east-1.amazonaws.com/ecr_sample_sre:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 80
               protocol: TCP
               name: http
           # resources:
