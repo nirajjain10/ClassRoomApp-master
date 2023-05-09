@@ -79,7 +79,8 @@
             "dockerRun": {},
             "netCore": {
                 "appProject": "${workspaceFolder}/src/ClassroomApp.csproj",
-                "enableDebugging": true
+                "enableDebugging": true,
+                "configureSsl": false
             }
         },
         {
